@@ -61,7 +61,7 @@ class AuditParser(HTMLParser):
             self.description = bool(attrs.get("content", "").strip())
 
 errors = []
-pages = sorted(ROOT.glob("*.html")) + sorted((ROOT / "articles").glob("*.html"))
+pages = sorted(p for p in ROOT.glob("*.html") if not p.name.startswith("google")) + sorted((ROOT / "articles").glob("*.html"))
 parsed = {}
 for page in pages:
     parser = AuditParser()
