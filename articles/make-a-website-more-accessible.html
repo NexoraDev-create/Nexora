@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="canonical" href="https://nexoradev-create.github.io/Nexora/articles/make-a-website-more-accessible.html">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A practical first accessibility pass for headings, keyboard use, contrast, forms, links, images, and mobile layouts on small websites.">
+  <meta name="theme-color" content="#101411">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <title>Practical accessibility improvements for a small website — Nexora</title>
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://nexoradev-create.github.io/Nexora/articles/make-a-website-more-accessible.html">
+  <meta property="og:site_name" content="Nexora">
+  <meta property="og:title" content="Practical accessibility improvements for a small website — Nexora">
+  <meta property="og:description" content="A practical first accessibility pass for headings, keyboard use, contrast, forms, links, images, and mobile layouts on small websites.">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="../article.css">
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Practical accessibility improvements for a small website",
+  "description": "A practical first accessibility pass for headings, keyboard use, contrast, forms, links, images, and mobile layouts on small websites.",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://nexoradev-create.github.io/Nexora/articles/make-a-website-more-accessible.html"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Nexora Editorial",
+    "url": "https://nexoradev-create.github.io/Nexora/about.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Nexora",
+    "url": "https://nexoradev-create.github.io/Nexora/"
+  },
+  "datePublished": "2026-11-23",
+  "dateModified": "2026-11-23",
+  "inLanguage": "en"
+}</script>
+  <link rel="alternate" type="application/rss+xml" title="Nexora RSS Feed" href="../feed.xml">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="../"><span class="brand-mark">n</span> nexora<span class="brand-dot">.</span></a>
+    <nav class="main-nav" aria-label="Main navigation"><a href="../#latest">Latest</a><a href="../#guides">Guides</a><a href="../about.html">About</a><a href="../feed.xml">RSS</a></nav>
+    <a class="header-link" href="../">Home <span>↗</span></a>
+  </header>
+  <main class="article-wrap" id="main-content">
+    <a class="back-link" href="../#latest">← Back to Nexora</a>
+    <div class="eyebrow">BETTER WORKFLOWS · 8 MIN READ</div>
+    <h1>Practical accessibility improvements for a small website</h1>
+    <p class="article-deck">Small, deliberate improvements can make a website easier to use for more people.</p>
+    <div class="article-meta">NEXORA EDITORIAL · UPDATED NOVEMBER 23, 2026 · BETTER WORKFLOWS</div>
+    <div class="article-body">
+      <h2>Treat accessibility as part of the design</h2>
+      <p>Accessibility is not a final decoration or a single plugin. It is the practice of making content and functionality usable by people with different abilities, devices, and ways of interacting. Good structure often improves clarity for everyone.</p>
+      <p>A quick manual review can reveal obvious barriers, but it does not prove a site conforms to a formal standard. For high-stakes or commercial services, use appropriate testing and qualified accessibility expertise.</p>
+      <h2>Use meaningful structure</h2>
+      <p>Use one clear page title and organize sections with headings in a logical order. Headings should describe the content that follows rather than exist only to create a visual size. Semantic landmarks help assistive technologies and make pages easier to navigate.</p>
+      <p>Set the document language correctly and use descriptive page titles. A visitor should be able to understand where they are from the browser tab and the main heading.</p>
+      <h2>Make keyboard navigation possible</h2>
+      <p>Try using the site without a mouse. You should be able to reach links and controls, see which element has focus, and operate interactive features with the keyboard. Focus should not disappear behind sticky headers or overlays.</p>
+      <p>Avoid interactions that work only on hover. If a menu, tooltip, or control appears when a pointer moves over it, make sure keyboard and touch users have an equivalent way to access it.</p>
+      <h2>Check contrast and readability</h2>
+      <p>Text needs enough contrast against its background to remain readable. Do not communicate status using color alone; combine color with labels, icons, or text. Keep body text comfortable to read and avoid long lines or overly dense paragraphs.</p>
+      <p>Test the site at different zoom levels and on a narrow screen. Content should reflow without forcing horizontal scrolling for ordinary text, and controls should remain usable with touch.</p>
+      <h2>Write useful link and image text</h2>
+      <p>Link text should explain its destination or action. Repeated labels such as “click here” provide little context when read out of surrounding text. Decorative images can use empty alternative text; informative images need concise descriptions of their purpose.</p>
+      <p>Do not put essential text only inside an image. If a graphic contains information, provide that information in the page text or an accessible equivalent.</p>
+      <h2>Label forms and explain errors</h2>
+      <p>Every form control needs a programmatic label, not just placeholder text. Explain required fields before submission and identify errors in text that helps the person correct them. Preserve entered information when validation fails.</p>
+      <p>Use clear instructions and avoid asking for information that is not necessary. For sensitive data, explain why it is collected and how it is handled before someone submits it.</p>
+      <h2>Test with people and tools</h2>
+      <p>Automated checkers can find some missing labels, contrast issues, and structural problems, but they cannot judge every interaction or whether the content makes sense. Combine automated checks with keyboard testing, zoom, screen-reader review, and feedback from users.</p>
+      <p>Fix barriers according to their impact and keep a record of what was tested. Accessibility is an ongoing quality practice as pages and components change.</p>
+      <h2>A practical template</h2><p>Use this outline as a starting point and adapt it to the project. Keep assumptions visible and remove fields that do not apply.</p><pre class="template-card"><code>[ ] Page language and title are correct
+[ ] Headings describe the page structure
+[ ] Keyboard focus is visible
+[ ] All controls work without a mouse
+[ ] Text contrast is readable
+[ ] Links describe their destination
+[ ] Informative images have useful alt text
+[ ] Forms have labels and clear errors
+[ ] Layout works when zoomed and on mobile
+[ ] Manual testing supplements automated checks</code></pre>
+      <p class="article-note">Nexora note: this guide is educational and provides general information. Adapt the suggestions to your circumstances and check applicable professional, legal, security, or accessibility requirements where relevant.</p>
+      <nav class="related-reading" aria-label="Related guides"><h2>Continue exploring</h2><a href="build-a-simple-digital-workflow.html">Build A Simple Digital Workflow ↗</a><a href="client-onboarding-for-freelancers.html">Client Onboarding For Freelancers ↗</a></nav>
+    </div>
+  </main>
+  <footer class="site-footer">
+    <a class="brand" href="../"><span class="brand-mark">n</span> nexora<span class="brand-dot">.</span></a>
+    <span>INDEPENDENT IDEAS FOR A DIGITAL WORLD.</span>
+    <div><a href="../privacy.html">Privacy</a><a href="../about.html">About</a><a href="../feed.xml">RSS</a></div>
+    <small>© <span id="year"></span> NEXORA.</small>
+  </footer>
+  <script src="../app.js"></script>
+</body>
+</html>

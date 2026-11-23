@@ -132,8 +132,9 @@ feed_path = ROOT / "feed.xml"
 try:
     feed_root = ET.parse(feed_path).getroot()
     items = feed_root.findall("./channel/item")
-    if feed_root.tag != "rss" or len(items) != 6:
-        errors.append("feed.xml: expected a valid RSS feed with six article items")
+    expected_items = len(list((ROOT / "articles").glob("*.html")))
+    if feed_root.tag != "rss" or len(items) != expected_items:
+        errors.append(f"feed.xml: expected {expected_items} article items, found {len(items)}")
     for item in items:
         if not item.findtext("title") or not item.findtext("link") or not item.findtext("description"):
             errors.append("feed.xml: item missing title, link, or description")
