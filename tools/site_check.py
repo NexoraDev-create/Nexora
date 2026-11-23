@@ -6,6 +6,7 @@ from urllib.parse import urlsplit
 import json
 import re
 import sys
+import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parent.parent
 CHECKED_ATTRS = {
@@ -126,6 +127,18 @@ for page, parser in parsed.items():
             target_parser = parsed.get(target)
             if target_parser and url.fragment not in target_parser.ids:
                 errors.append(f"{rel}: missing fragment target -> {raw}")
+
+feed_path = ROOT / "feed.xml"
+try:
+    feed_root = ET.parse(feed_path).getroot()
+    items = feed_root.findall("./channel/item")
+    if feed_root.tag != "rss" or len(items) != 6:
+        errors.append("feed.xml: expected a valid RSS feed with six article items")
+    for item in items:
+        if not item.findtext("title") or not item.findtext("link") or not item.findtext("description"):
+            errors.append("feed.xml: item missing title, link, or description")
+except (ET.ParseError, OSError) as exc:
+    errors.append(f"feed.xml: invalid or missing RSS feed: {exc}")
 
 print(f"Checked {len(parsed)} HTML pages.")
 if errors:
