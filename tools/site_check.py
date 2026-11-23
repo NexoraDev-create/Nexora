@@ -28,6 +28,8 @@ class AuditParser(HTMLParser):
         self.nav_label = False
         self.missing_alt = 0
         self.title = False
+        self.canonical = False
+        self.og_url = False
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
@@ -35,6 +37,10 @@ class AuditParser(HTMLParser):
             self.lang = bool(attrs.get("lang"))
         if tag == "title":
             self.title = True
+        if tag == "link" and attrs.get("rel", "").lower() == "canonical" and attrs.get("href", "").startswith("https://nexoradev-create.github.io/Nexora/"):
+            self.canonical = True
+        if tag == "meta" and attrs.get("property") == "og:url" and attrs.get("content", "").startswith("https://nexoradev-create.github.io/Nexora/"):
+            self.og_url = True
         if tag == "img" and "alt" not in attrs:
             self.missing_alt += 1
         if tag == "a" and "skip-link" in attrs.get("class", "").split() and attrs.get("href") == "#main-content":
@@ -72,6 +78,10 @@ for page in pages:
         errors.append(f"{rel}: missing meta description")
     if not parser.title:
         errors.append(f"{rel}: missing title element")
+    if page.name != "404.html" and not parser.canonical:
+        errors.append(f"{rel}: missing or invalid canonical URL")
+    if page.name != "404.html" and not parser.og_url:
+        errors.append(f"{rel}: missing or invalid Open Graph URL")
     if parser.missing_alt:
         errors.append(f"{rel}: {parser.missing_alt} image(s) missing alt text")
     if not parser.skip_link:
