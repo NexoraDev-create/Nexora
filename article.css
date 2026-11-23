@@ -3,3 +3,5 @@
 .related-reading h2{font-family:"Manrope";font-size:17px;letter-spacing:-.3px;color:var(--ink);margin:0 0 4px}
 .related-reading a{font-size:12px;color:var(--green);width:fit-content;border-bottom:1px solid #53624f;padding-bottom:4px}
 .related-reading a:hover{color:var(--ink)}
+
+.template-card{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;color:#dce6d9;font:12px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;margin:12px 0 26px}.guide-table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.6;margin:16px 0 28px}.guide-table th,.guide-table td{text-align:left;vertical-align:top;padding:12px;border-bottom:1px solid var(--line)}.guide-table th{color:var(--green);font-size:10px;letter-spacing:.08em;text-transform:uppercase}.guide-table td{color:#c5cec4}.table-scroll{overflow-x:auto;max-width:100%}.article-body a{color:var(--green);text-decoration:underline;text-underline-offset:3px}.article-body a:hover{color:var(--ink)}@media(max-width:600px){.guide-table{min-width:540px}.template-card{font-size:11px;padding:15px}}

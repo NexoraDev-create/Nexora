@@ -3,6 +3,8 @@
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlsplit
+import json
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -72,6 +74,18 @@ for page in pages:
         continue
     parsed[page.resolve()] = parser
     rel = page.relative_to(ROOT)
+    source = page.read_text(encoding="utf-8")
+    schema_blocks = re.findall(r'<script\s+type=["\']application/ld\+json["\']\s*>(.*?)</script>', source, re.I | re.S)
+    schemas = []
+    for block in schema_blocks:
+        try:
+            schemas.append(json.loads(block))
+        except json.JSONDecodeError as exc:
+            errors.append(f"{rel}: invalid JSON-LD: {exc}")
+    if page.name != "404.html" and not schemas:
+        errors.append(f"{rel}: missing structured data (JSON-LD)")
+    if page.parent.name == "articles" and schemas and schemas[0].get("@type") != "Article":
+        errors.append(f"{rel}: article page must use Article structured data")
     if not parser.lang:
         errors.append(f"{rel}: missing html lang attribute")
     if not parser.description:
