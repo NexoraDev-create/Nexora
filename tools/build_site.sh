@@ -7,7 +7,7 @@ cd "$ROOT"
 python3 tools/site_check.py
 rm -rf dist
 mkdir -p dist/articles
-cp ./*.html ./*.css ./*.js ./*.svg robots.txt dist/
+cp ./*.html ./*.css ./*.js ./*.svg robots.txt sitemap.xml dist/
 cp articles/*.html dist/articles/
 
 printf '\nBuilt production site in %s/dist\n' "$ROOT"
