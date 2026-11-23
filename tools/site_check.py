@@ -23,11 +23,26 @@ class AuditParser(HTMLParser):
         self.duplicates = set()
         self.description = False
         self.lang = False
+        self.skip_link = False
+        self.main_id = False
+        self.nav_label = False
+        self.missing_alt = 0
+        self.title = False
 
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if tag == "html":
             self.lang = bool(attrs.get("lang"))
+        if tag == "title":
+            self.title = True
+        if tag == "img" and "alt" not in attrs:
+            self.missing_alt += 1
+        if tag == "a" and "skip-link" in attrs.get("class", "").split() and attrs.get("href") == "#main-content":
+            self.skip_link = True
+        if tag == "main" and attrs.get("id") == "main-content":
+            self.main_id = True
+        if tag == "nav" and attrs.get("aria-label", "").strip():
+            self.nav_label = True
         if attrs.get("id"):
             if attrs["id"] in self.ids:
                 self.duplicates.add(attrs["id"])
@@ -40,7 +55,7 @@ class AuditParser(HTMLParser):
             self.description = bool(attrs.get("content", "").strip())
 
 errors = []
-pages = sorted(ROOT.rglob("*.html"))
+pages = sorted(ROOT.glob("*.html")) + sorted((ROOT / "articles").glob("*.html"))
 parsed = {}
 for page in pages:
     parser = AuditParser()
@@ -55,6 +70,16 @@ for page in pages:
         errors.append(f"{rel}: missing html lang attribute")
     if not parser.description:
         errors.append(f"{rel}: missing meta description")
+    if not parser.title:
+        errors.append(f"{rel}: missing title element")
+    if parser.missing_alt:
+        errors.append(f"{rel}: {parser.missing_alt} image(s) missing alt text")
+    if not parser.skip_link:
+        errors.append(f"{rel}: missing skip link to main content")
+    if not parser.main_id:
+        errors.append(f"{rel}: missing main-content landmark id")
+    if not parser.nav_label:
+        errors.append(f"{rel}: navigation missing accessible label")
     for duplicate in sorted(parser.duplicates):
         errors.append(f"{rel}: duplicate id -> {duplicate}")
 

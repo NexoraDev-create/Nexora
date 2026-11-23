@@ -12,10 +12,18 @@ python -m http.server 4173 --bind 127.0.0.1
 
 Open `http://127.0.0.1:4173` on the same computer.
 
+To generate the clean production bundle in `dist/`:
+
+```bash
+bash tools/build_site.sh
+```
+
 ## Current build
 
 - Responsive editorial homepage with a premium dark visual identity.
-- Four original English-language guides.
+- Six original English-language guides with cross-links between related topics.
+- Keyboard skip links, visible focus states, labeled navigation, and reduced-motion support.
+- Automated checks for metadata, duplicate IDs, accessible navigation landmarks, and broken local links/assets.
 - About and draft Privacy pages.
 - Basic `robots.txt` allowing crawler access.
 - No analytics, advertising, newsletter collection, user accounts, or tracking scripts.
