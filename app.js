@@ -84,3 +84,56 @@ if(answersEl){
     answersEl.appendChild(button);
   });
 }
+
+
+// Mistério semanal: as pistas são liberadas progressivamente e a conclusão aparece no domingo.
+const weeklyMysteries = [
+  {category:"HISTÓRIA · MANUSCRITOS",title:"O livro que ninguém conseguiu ler",intro:"Um manuscrito antigo reúne escrita desconhecida, desenhos curiosos e séculos de tentativas de interpretação. O que exatamente temos diante de nós?",symbol:"?",answer:"O Manuscrito Voynich",explanation:"É um códice ilustrado, produzido provavelmente no início do século XV. Seu sistema de escrita ainda não foi decifrado de forma consensual. Existem hipóteses sobre sua origem e conteúdo, mas nenhuma tradução foi comprovada. O mistério real não é uma solução escondida já conhecida: é justamente não sabermos o que o texto diz.",clues:["É um livro feito à mão, não um documento digital ou uma impressão moderna.","Suas páginas misturam texto em uma escrita ainda não identificada e ilustrações de plantas, diagramas e figuras.","A análise do pergaminho indica que ele foi produzido no começo do século XV.","O manuscrito recebeu o nome de Wilfrid Voynich, um livreiro que o adquiriu em 1912."],source:"https://beinecke.library.yale.edu/collections/highlights/voynich-manuscript",label:"YALE · BEINECKE LIBRARY"},
+  {category:"ARQUEOLOGIA · TECNOLOGIA",title:"A máquina encontrada no fundo do mar",intro:"Um objeto recuperado de um naufrágio parecia simples à primeira vista. Dentro dele, porém, havia uma engenharia surpreendentemente sofisticada para sua época.",symbol:"⚙",answer:"O mecanismo de Anticítera",explanation:"Construído na Grécia antiga, o mecanismo usava engrenagens para representar ciclos astronômicos e prever fenômenos, como eclipses. É frequentemente descrito como um computador analógico antigo. Pesquisadores ainda estudam detalhes de seu funcionamento e de seu contexto.",clues:["O objeto foi recuperado de um naufrágio perto de uma ilha grega.","Ele é feito de bronze e possui engrenagens cuidadosamente construídas.","Seu funcionamento está ligado à observação do céu e a ciclos astronômicos.","O nome vem da ilha de Anticítera, próxima ao local do naufrágio."],source:"https://www.nhm.ac.uk/discover/what-is-the-antikythera-mechanism.html",label:"NATURAL HISTORY MUSEUM"},
+  {category:"ASTRONOMIA · SINAIS",title:"Um sinal estranho vindo do espaço",intro:"Durante uma observação do céu, um radiotelescópio registrou um sinal intenso e incomum. Ele chamou atenção, mas sua origem nunca foi confirmada.",symbol:"〰",answer:"O sinal Wow!",explanation:"O sinal Wow! foi detectado em 1977 pelo radiotelescópio Big Ear, nos Estados Unidos. Sua intensidade e características chamaram atenção, mas ele não voltou a ser observado de maneira confirmada. Não há evidência de que tenha sido enviado por vida extraterrestre; sua origem permanece desconhecida.",clues:["O registro foi feito em 1977 por um radiotelescópio.","O sinal durou cerca de 72 segundos na observação registrada.","Um astrônomo escreveu uma anotação de surpresa ao lado dos dados impressos.","A anotação manuscrita deu nome ao evento: Wow!."],source:"https://www.seti.org/",label:"SETI INSTITUTE"},
+  {category:"HISTÓRIA · NAVEGAÇÃO",title:"O navio encontrado sem sua tripulação",intro:"No século XIX, um navio foi encontrado à deriva no Atlântico. Estava flutuando, mas ninguém da tripulação foi localizado. O que aconteceu continua sem resposta definitiva.",symbol:"⌁",answer:"O caso do Mary Celeste",explanation:"O Mary Celeste foi encontrado abandonado em 1872, no Atlântico. A tripulação nunca foi localizada e não existe uma explicação definitiva aceita para o abandono. Relatos populares acrescentaram detalhes dramáticos ao caso, por isso é importante separar documentos históricos de lendas posteriores.",clues:["O caso aconteceu no século XIX, durante uma travessia pelo Atlântico.","A embarcação foi encontrada navegável, mas sem as pessoas que estavam a bordo.","O navio transportava carga comercial e havia partido de Nova York.","O nome da embarcação era Mary Celeste."],source:"https://www.britannica.com/topic/Mary-Celeste",label:"ENCYCLOPAEDIA BRITANNICA"}
+];
+function weekIndex(){
+  const now=new Date();
+  const first=new Date(now.getFullYear(),0,1);
+  const week=Math.floor((now-first)/604800000);
+  return week%weeklyMysteries.length;
+}
+function setupWeeklyMystery(){
+  const root=document.getElementById("mystery-clues");
+  if(!root)return;
+  const item=weeklyMysteries[weekIndex()];
+  const day=(new Date().getDay()+6)%7; // segunda=0, domingo=6
+  const available=Math.min(4,Math.max(1,Math.floor(day*4/6)+1));
+  setText("mystery-case",String(weekIndex()+1).padStart(3,"0"));
+  setText("mystery-category",item.category);
+  setText("mystery-title",item.title);
+  setText("mystery-intro",item.intro);
+  setText("mystery-symbol",item.symbol);
+  setText("mystery-status",day===6?"EDIÇÃO DA SEMANA · REVELADA":`${available} DE 4 PISTAS LIBERADAS`);
+  root.innerHTML="";
+  item.clues.forEach((clue,index)=>{
+    const row=document.createElement("div");
+    row.className="mystery-clue";
+    const label=document.createElement("span");
+    label.className="mystery-clue-number";
+    label.textContent=String(index+1).padStart(2,"0");
+    const body=document.createElement("p");
+    if(index<available){body.textContent=clue;}
+    else{body.textContent="Pista liberada em breve";row.classList.add("locked");}
+    row.append(label,body);root.appendChild(row);
+  });
+  const reveal=document.getElementById("mystery-reveal");
+  if(day===6){
+    reveal.hidden=false;
+    setText("mystery-answer",item.answer);
+    setText("mystery-explanation",item.explanation);
+    const link=document.getElementById("mystery-source");
+    link.href=item.source;link.textContent="Fonte: "+item.label+" ↗";
+    setText("mystery-return","A solução desta edição está aberta. A próxima investigação começa na segunda-feira.");
+  }else{
+    reveal.hidden=true;
+    setText("mystery-return",day===5?"A última pista já está disponível. A conclusão será revelada amanhã.":"Volte amanhã para encontrar uma nova pista. A conclusão aparece no domingo.");
+  }
+}
+setupWeeklyMystery();
