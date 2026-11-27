@@ -1,7 +1,7 @@
 const year = document.getElementById("year");
 if (year) year.textContent = new Date().getFullYear();
 
-const discoveries = window.NEXORA_DISCOVERIES;
+const discoveries = Array.isArray(window.NEXORA_DISCOVERIES) ? window.NEXORA_DISCOVERIES : [];
 
 const challenges = [
   {category:"ASTRONOMIA",question:"Qual planeta tem um dia mais longo que seu próprio ano?",answers:["Mercúrio","Vênus","Marte"],correct:1,explanation:"Vênus leva cerca de 243 dias terrestres para girar uma vez sobre seu eixo e aproximadamente 225 dias para orbitar o Sol."},
@@ -22,21 +22,21 @@ function dayIndex(length){
 const today = new Date();
 const dateEl = document.getElementById("today-date");
 if(dateEl) dateEl.textContent = new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"long",year:"numeric"}).format(today).toUpperCase();
-const dailyDiscoveryIndex=dayIndex(discoveries.length);
+const dailyDiscoveryIndex=discoveries.length?dayIndex(discoveries.length):0;
 const requestedDiscovery=new URLSearchParams(window.location.search).get("descoberta");
 const requestedIndex=requestedDiscovery!==null && /^\d+$/.test(requestedDiscovery) ? Number(requestedDiscovery) : -1;
 const discoveryIndex=Number.isInteger(requestedIndex) && requestedIndex>=0 && requestedIndex<discoveries.length ? requestedIndex : dailyDiscoveryIndex;
-const discovery=discoveries[discoveryIndex];
+const discovery=discoveries[discoveryIndex]||null;
 const setText = (id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
 
 // Jornada diária: duas de três atividades concluem a missão e mantêm a sequência.
 const journeyKey="nexora-journey-v1";
 const localDateKey=(date=new Date())=>[date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-");
 const todayKey=localDateKey();
-let journey={today:todayKey,actions:{},lastCompleted:"",streak:0,xp:0,missions:0};
+let journey={today:todayKey,actions:{},lastCompleted:"",streak:0,bestStreak:0,xp:0,missions:0,completedDates:[],unlockedBadges:[],challengeDate:"",challengeAnswer:null};
 try{
   const saved=JSON.parse(localStorage.getItem(journeyKey)||"null");
-  if(saved && typeof saved==="object")journey={...journey,...saved,actions:saved.today===todayKey && saved.actions && typeof saved.actions==="object" ? saved.actions : {},xp:Number.isFinite(saved.xp)?Math.max(0,saved.xp):0,missions:Number.isFinite(saved.missions)?Math.max(0,saved.missions):0};
+  if(saved && typeof saved==="object")journey={...journey,...saved,actions:saved.today===todayKey && saved.actions && typeof saved.actions==="object" ? saved.actions : {},xp:Number.isFinite(saved.xp)?Math.max(0,saved.xp):0,missions:Number.isFinite(saved.missions)?Math.max(0,saved.missions):0,streak:Number.isFinite(saved.streak)?Math.max(0,saved.streak):0,bestStreak:Number.isFinite(saved.bestStreak)?Math.max(saved.bestStreak||0,saved.streak||0):Math.max(0,saved.streak||0),completedDates:Array.isArray(saved.completedDates)?saved.completedDates.filter(value=>typeof value==="string").slice(-60):[],unlockedBadges:Array.isArray(saved.unlockedBadges)?saved.unlockedBadges.filter(value=>typeof value==="string"):[],challengeDate:typeof saved.challengeDate==="string"?saved.challengeDate:"",challengeAnswer:Number.isInteger(saved.challengeAnswer)?saved.challengeAnswer:null};
 }catch(error){/* armazenamento indisponível: a jornada funciona durante esta visita */}
 if(journey.today!==todayKey){journey.today=todayKey;journey.actions={};}
 function saveJourney(){try{localStorage.setItem(journeyKey,JSON.stringify(journey));}catch(error){/* armazenamento local pode estar bloqueado */}}
@@ -66,8 +66,14 @@ function updateJourney(){
   const percent=next?Math.round((journey.xp-level.min)/(next.min-level.min)*100):100;
   if(progressEl)progressEl.setAttribute("aria-valuenow",String(percent));if(progressFill)progressFill.style.width=percent+"%";
   const nextEl=document.getElementById("explorer-next");if(nextEl)nextEl.textContent=next?`${next.min-journey.xp} XP para o próximo nível`:"Nível máximo alcançado";
-  const unlocked={first:journey.missions>=1,streak3:journey.streak>=3,xp100:journey.xp>=100,streak7:journey.streak>=7};
-  document.querySelectorAll("[data-badge]").forEach(badge=>{const active=!!unlocked[badge.dataset.badge];badge.classList.toggle("unlocked",active);badge.classList.toggle("locked",!active);badge.setAttribute("aria-label",badge.textContent+(active?" · desbloqueada":" · bloqueada"));});
+  const unlocked={first:journey.missions>=1,streak3:journey.bestStreak>=3,xp100:journey.xp>=100,streak7:journey.bestStreak>=7,missions5:journey.missions>=5,xp500:journey.xp>=500};
+  let badgesChanged=false;
+  Object.entries(unlocked).forEach(([key,active])=>{if(active&&!journey.unlockedBadges.includes(key)){journey.unlockedBadges.push(key);badgesChanged=true;}});
+  document.querySelectorAll("[data-badge]").forEach(badge=>{const active=journey.unlockedBadges.includes(badge.dataset.badge);badge.classList.toggle("unlocked",active);badge.classList.toggle("locked",!active);badge.setAttribute("aria-label",badge.textContent+(active?" · desbloqueada":" · bloqueada"));});
+  const week=document.getElementById("journey-week");
+  if(week){week.innerHTML="";for(let offset=6;offset>=0;offset--){const date=new Date();date.setDate(date.getDate()-offset);const key=localDateKey(date);const day=document.createElement("span");day.className="journey-day"+(journey.completedDates.includes(key)?" is-complete":"")+(offset===0?" is-today":"");day.textContent=new Intl.DateTimeFormat("pt-BR",{weekday:"narrow"}).format(date);day.title=new Intl.DateTimeFormat("pt-BR",{weekday:"long",day:"2-digit",month:"long"}).format(date)+(journey.completedDates.includes(key)?" · missão concluída":" · sem missão registrada");day.setAttribute("aria-label",day.title);week.appendChild(day);}}
+  const best=document.getElementById("best-streak-count");if(best)best.textContent=String(journey.bestStreak||0);
+  if(badgesChanged)saveJourney();
 }
 function completeJourneyTask(task){
   if(journey.actions[task])return;
@@ -78,6 +84,10 @@ function completeJourneyTask(task){
   if(done>=2 && journey.lastCompleted!==todayKey){
     const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
     journey.streak=journey.lastCompleted===localDateKey(yesterday)?(journey.streak||0)+1:1;
+    journey.bestStreak=Math.max(journey.bestStreak||0,journey.streak);
+    journey.completedDates=Array.isArray(journey.completedDates)?journey.completedDates:[];
+    if(!journey.completedDates.includes(todayKey))journey.completedDates.push(todayKey);
+    journey.completedDates=journey.completedDates.slice(-60);
     journey.lastCompleted=todayKey;
     journey.xp+=25;
     journey.missions=(journey.missions||0)+1;
@@ -87,6 +97,8 @@ function completeJourneyTask(task){
   updateJourney();
 }
 if(journey.lastCompleted){
+  if(!journey.completedDates.includes(journey.lastCompleted))journey.completedDates.push(journey.lastCompleted);
+  journey.bestStreak=Math.max(journey.bestStreak||0,journey.streak||0);
   const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
   if(journey.lastCompleted!==todayKey && journey.lastCompleted!==localDateKey(yesterday))journey.streak=0;
 }
@@ -99,6 +111,7 @@ if(markDiscovery){
   });
 }
 
+if(discovery){
 setText("discovery-number",String(discoveryIndex+1).padStart(3,"0"));
 setText("discovery-category",discovery.category);
 setText("discovery-title",discovery.title);
@@ -128,6 +141,8 @@ if(shareButton){
       if(shareFeedback)shareFeedback.textContent="Não foi possível compartilhar agora. Tente novamente.";
     }
   });
+}
+
 }
 
 const range=document.getElementById("distance-range");
@@ -164,6 +179,7 @@ if(answersEl){
       if(answersEl.dataset.answered==="true")return;
       answersEl.dataset.answered="true";
       completeJourneyTask("challenge");
+      journey.challengeDate=todayKey;journey.challengeAnswer=index;saveJourney();
       const correct=index===challenge.correct;
       [...answersEl.children].forEach((item,i)=>{
         item.disabled=true;
@@ -174,6 +190,11 @@ if(answersEl){
     });
     answersEl.appendChild(button);
   });
+  if(journey.challengeDate===todayKey && Number.isInteger(journey.challengeAnswer) && journey.challengeAnswer>=0 && journey.challengeAnswer<challenge.answers.length){
+    answersEl.dataset.answered="true";
+    [...answersEl.children].forEach((button,index)=>{button.disabled=true;if(index===challenge.correct)button.classList.add("correct");else if(index===journey.challengeAnswer)button.classList.add("wrong");});
+    if(feedback)feedback.textContent=(journey.challengeAnswer===challenge.correct?"Resposta certa! ":"Não foi dessa vez. ")+challenge.explanation;
+  }
 }
 
 
@@ -231,3 +252,7 @@ function setupWeeklyMystery(){
   }
 }
 setupWeeklyMystery();
+
+
+// Instalação e leitura offline: o site continua funcional após a primeira visita online.
+if("serviceWorker" in navigator && document.currentScript){const appBase=new URL("./",document.currentScript.src);window.addEventListener("load",()=>{navigator.serviceWorker.register(new URL("sw.js",appBase).href,{scope:appBase.pathname}).catch(()=>{});});}

@@ -34,7 +34,9 @@ The build creates a clean production bundle in `dist/`. The audit checks metadat
 - Interactive inverse-square light-intensity experiment.
 - Daily multiple-choice challenge with answer explanation.
 - Preview cards for future Nexora Originals projects.
-- Existing English practical guides retained in the repository as an archive while the new editorial direction is developed.
+- Searchable Portuguese index for the retained English practical guides, with the language clearly labeled.
+- Daily missions, XP, best streak, seven-day activity history, and permanent achievements are stored locally in the visitor browser.
+- Installable PWA shell with offline access to the homepage, discovery archive, weekly case archive, and discovery pages after the first online visit.
 - No analytics, advertising, newsletter collection, user accounts, or visitor tracking are enabled.
 
 ## Before public relaunch or monetization

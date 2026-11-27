@@ -85,7 +85,7 @@ for page in pages:
             errors.append(f"{rel}: invalid JSON-LD: {exc}")
     if page.name != "404.html" and not schemas:
         errors.append(f"{rel}: missing structured data (JSON-LD)")
-    if (page.parent.name == "articles" or (page.parent.name == "discoveries" and page.name != "index.html")) and schemas and schemas[0].get("@type") != "Article":
+    if ((page.parent.name == "articles" and page.name != "index.html") or (page.parent.name == "discoveries" and page.name != "index.html")) and schemas and schemas[0].get("@type") != "Article":
         errors.append(f"{rel}: article page must use Article structured data")
     if not parser.lang:
         errors.append(f"{rel}: missing html lang attribute")
@@ -132,7 +132,7 @@ feed_path = ROOT / "feed.xml"
 try:
     feed_root = ET.parse(feed_path).getroot()
     items = feed_root.findall("./channel/item")
-    expected_items = len(list((ROOT / "articles").glob("*.html")))
+    expected_items = sum(1 for page in (ROOT / "articles").glob("*.html") if page.name != "index.html")
     if feed_root.tag != "rss" or len(items) != expected_items:
         errors.append(f"feed.xml: expected {expected_items} article items, found {len(items)}")
     for item in items:
@@ -140,6 +140,42 @@ try:
             errors.append("feed.xml: item missing title, link, or description")
 except (ET.ParseError, OSError) as exc:
     errors.append(f"feed.xml: invalid or missing RSS feed: {exc}")
+
+# Verify the sitemap is valid, unique, and points only to published local files.
+try:
+    sitemap_root = ET.parse(ROOT / "sitemap.xml").getroot()
+    seen_urls = set()
+    for node in sitemap_root:
+        loc = node.find("{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+        if loc is None or not loc.text:
+            errors.append("sitemap.xml: URL entry missing loc")
+            continue
+        url = urlsplit(loc.text)
+        if url.netloc != "nexoradev-create.github.io":
+            errors.append(f"sitemap.xml: unexpected host -> {loc.text}")
+        if loc.text in seen_urls:
+            errors.append(f"sitemap.xml: duplicate URL -> {loc.text}")
+        seen_urls.add(loc.text)
+        local_path = url.path.split("/Nexora/", 1)[-1]
+        target = ROOT / local_path if local_path else ROOT / "index.html"
+        if target.is_dir():
+            target = target / "index.html"
+        if not target.exists():
+            errors.append(f"sitemap.xml: missing local page -> {loc.text}")
+except (ET.ParseError, OSError) as exc:
+    errors.append(f"sitemap.xml: invalid or missing sitemap: {exc}")
+
+try:
+    manifest = json.loads((ROOT / "manifest.webmanifest").read_text(encoding="utf-8"))
+    if manifest.get("start_url") != "./" or manifest.get("display") != "standalone" or not manifest.get("icons"):
+        errors.append("manifest.webmanifest: missing install metadata")
+    for icon in manifest.get("icons", []):
+        if not (ROOT / icon.get("src", "missing")).exists():
+            errors.append(f"manifest.webmanifest: missing icon -> {icon.get('src')}")
+except (json.JSONDecodeError, OSError) as exc:
+    errors.append(f"manifest.webmanifest: invalid or missing manifest: {exc}")
+if not (ROOT / "sw.js").exists():
+    errors.append("sw.js: missing offline service worker")
 
 print(f"Checked {len(parsed)} HTML pages.")
 if errors:

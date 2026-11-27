@@ -30,6 +30,7 @@ for item in items:
   <meta name="description" content="{e(description, quote=True)}">
   <link rel="canonical" href="{url}">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="manifest" href="../manifest.webmanifest">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Nexora">
   <meta property="og:url" content="{url}">
@@ -66,6 +67,7 @@ for item in items:
     <a class="button button-primary article-home" href="../">Explorar mais descobertas <span>↗</span></a>
   </main>
   <footer class="site-footer"><a class="brand" href="../"><span class="brand-mark">N</span> nexora<span class="brand-period">.</span></a><span>DISCOVER SOMETHING NEW.</span><div><a href="../about.html">Sobre</a><a href="../privacy.html">Privacidade</a></div><small>© {date.today().year} NEXORA · CONHECIMENTO EM MOVIMENTO.</small></footer>
+  <script src="../app.js"></script>
 </body>
 </html>
 '''
@@ -73,7 +75,7 @@ for item in items:
 
 cards = []
 for index, item in enumerate(items, 1):
-    cards.append(f'''<a class="discovery-index-card" href="{item['slug']}.html"><span class="eyebrow">FIELD NOTE / {index:03d} · {escape(item['category'])}</span><h2>{escape(item['title'])}</h2><p>{escape(item['summary'])}</p><span class="inline-link">Explorar descoberta ↗</span></a>''')
+    cards.append(f'''<a class="discovery-index-card" data-discovery-card data-category="{escape(item['category'], quote=True)}" href="{item['slug']}.html"><span class="eyebrow">FIELD NOTE / {index:03d} · {escape(item['category'])}</span><h2>{escape(item['title'])}</h2><p>{escape(item['summary'])}</p><span class="inline-link">Explorar descoberta ↗</span></a>''')
 collection_url = BASE + "discoveries/"
 collection = f'''<!doctype html>
 <html lang="pt-BR">
@@ -84,16 +86,21 @@ collection = f'''<!doctype html>
   <meta property="og:type" content="website"><meta property="og:site_name" content="Nexora"><meta property="og:url" content="{collection_url}">
   <meta property="og:title" content="Arquivo de descobertas | Nexora"><meta property="og:description" content="Uma coleção de descobertas para explorar, entender e compartilhar.">
   <meta property="og:image" content="{BASE}discovery-share.svg"><meta name="twitter:card" content="summary_large_image">
-  <title>Arquivo de descobertas | Nexora</title><link rel="stylesheet" href="../styles.css">
+  <title>Arquivo de descobertas | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="manifest" href="../manifest.webmanifest">
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"CollectionPage","name":"Arquivo de descobertas da Nexora","url":collection_url,"inLanguage":"pt-BR"},ensure_ascii=False)}</script>
 </head>
 <body><a class="skip-link" href="#main-content">Pular para o conteúdo</a>
 <header class="site-header"><a class="brand" href="../" aria-label="Nexora início"><span class="brand-mark">N</span> nexora<span class="brand-period">.</span></a><nav class="main-nav" aria-label="Navegação principal"><a href="../#descoberta">Descoberta do dia</a><a href="../#misterio">Mistério semanal</a></nav><a class="header-link" href="../">Voltar à Nexora ↗</a></header>
-<main id="main-content" class="discovery-archive"><div class="eyebrow">NEXORA / ARQUIVO ABERTO</div><h1>Descobertas para <em>explorar.</em></h1><p class="archive-lead">Cada curiosidade tem sua própria página, contexto e fonte para você continuar investigando.</p><div class="discovery-index-grid">{''.join(cards)}</div></main>
-<footer class="site-footer"><a class="brand" href="../"><span class="brand-mark">N</span> nexora<span class="brand-period">.</span></a><span>DISCOVER SOMETHING NEW.</span><div><a href="../about.html">Sobre</a><a href="../privacy.html">Privacidade</a></div><small>© {date.today().year} NEXORA · CONHECIMENTO EM MOVIMENTO.</small></footer></body></html>'''
+<main id="main-content" class="discovery-archive"><div class="eyebrow">NEXORA / ARQUIVO ABERTO</div><h1>Descobertas para <em>explorar.</em></h1><p class="archive-lead">Cada curiosidade tem sua própria página, contexto e fonte para você continuar investigando.</p>
+<div class="archive-tools"><label for="discovery-search">BUSCAR DESCOBERTA<input id="discovery-search" type="search" placeholder="Ex.: oceano, Vênus, luz..." autocomplete="off"></label><label for="discovery-filter">CATEGORIA<select id="discovery-filter"><option value="">Todas as categorias</option>{''.join(f'<option value="{escape(category, quote=True)}">{escape(category)}</option>' for category in sorted({item['category'] for item in items}))}</select></label></div>
+<p class="archive-count" id="discovery-count" role="status">{len(items)} descobertas no arquivo</p><div class="discovery-index-grid">{''.join(cards)}</div>
+<script>
+(()=>{{const search=document.getElementById('discovery-search');const filter=document.getElementById('discovery-filter');const cards=[...document.querySelectorAll('[data-discovery-card]')];const count=document.getElementById('discovery-count');function apply(){{const term=search.value.trim().toLocaleLowerCase('pt-BR');let visible=0;cards.forEach(card=>{{const matchesText=card.textContent.toLocaleLowerCase('pt-BR').includes(term);const matchesCategory=!filter.value||card.dataset.category===filter.value;const show=matchesText&&matchesCategory;card.hidden=!show;if(show)visible++;}});count.textContent=visible+' de '+cards.length+' descobertas';}}search.addEventListener('input',apply);filter.addEventListener('change',apply);}})();
+</script></main>
+<footer class="site-footer"><a class="brand" href="../"><span class="brand-mark">N</span> nexora<span class="brand-period">.</span></a><span>DISCOVER SOMETHING NEW.</span><div><a href="../about.html">Sobre</a><a href="../privacy.html">Privacidade</a></div><small>© {date.today().year} NEXORA · CONHECIMENTO EM MOVIMENTO.</small></footer><script src="../app.js"></script></body></html>'''
 (out / "index.html").write_text(collection, encoding="utf-8")
 
-urls = [BASE, BASE+"about.html", BASE+"privacy.html", BASE+"discoveries/"]
+urls = [BASE, BASE+"about.html", BASE+"privacy.html", BASE+"discoveries/", BASE+"misterios.html", BASE+"articles/"]
 urls += [BASE+"discoveries/"+item["slug"]+".html" for item in items]
 urls += [BASE+"articles/"+p.name for p in sorted((ROOT/"articles").glob("*.html"))]
 urlset = ET.Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")

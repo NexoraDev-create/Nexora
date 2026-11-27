@@ -4,11 +4,13 @@ set -euo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+python3 tools/generate_articles.py
 python3 tools/generate_discoveries.py
 python3 tools/site_check.py
+node tools/test_app.js
 rm -rf dist
 mkdir -p dist/articles dist/discoveries
-cp ./*.html ./*.css ./*.js ./*.svg robots.txt sitemap.xml feed.xml dist/
+cp ./*.html ./*.css ./*.js ./*.svg ./*.webmanifest robots.txt sitemap.xml feed.xml dist/
 cp articles/*.html dist/articles/
 cp discoveries/*.html dist/discoveries/
 cp discoveries.js discovery-share.svg discoveries.json dist/

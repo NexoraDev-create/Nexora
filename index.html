@@ -7,6 +7,7 @@
   <meta name="description" content="Descubra algo novo todos os dias. Explore ciência, história, ideias e experiências interativas na Nexora.">
   <link rel="canonical" href="https://nexoradev-create.github.io/Nexora/">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Nexora">
   <meta property="og:url" content="https://nexoradev-create.github.io/Nexora/">
@@ -107,9 +108,10 @@
           <div class="explorer-progress" role="progressbar" aria-label="Progresso para o próximo nível" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="explorer-progress"><span id="explorer-progress-fill"></span></div>
           <p class="explorer-next" id="explorer-next">100 XP para o próximo nível</p>
           <div class="explorer-badges" id="explorer-badges" aria-live="polite">
-            <span class="explorer-badge locked" data-badge="first">Primeira missão</span><span class="explorer-badge locked" data-badge="streak3">Ritmo constante</span><span class="explorer-badge locked" data-badge="xp100">Explorador</span><span class="explorer-badge locked" data-badge="streak7">Uma semana</span>
+            <span class="explorer-badge locked" data-badge="first">Primeira missão</span><span class="explorer-badge locked" data-badge="streak3">Ritmo constante</span><span class="explorer-badge locked" data-badge="xp100">100 XP</span><span class="explorer-badge locked" data-badge="streak7">Uma semana</span><span class="explorer-badge locked" data-badge="missions5">Cinco missões</span><span class="explorer-badge locked" data-badge="xp500">500 XP</span>
           </div>
-          <p class="explorer-footnote">XP e conquistas ficam salvos apenas neste navegador. Não existe ranking público.</p>
+          <div class="journey-history"><div><span class="eyebrow">ÚLTIMOS 7 DIAS</span><strong>Seu ritmo</strong></div><div class="journey-week" id="journey-week" aria-label="Histórico de missões dos últimos sete dias"></div><p>Melhor sequência: <strong id="best-streak-count">0</strong> dias</p></div>
+          <p class="explorer-footnote">XP, histórico e conquistas ficam salvos apenas neste navegador. Conquistas desbloqueadas não são perdidas quando uma sequência é interrompida. Não existe ranking público.</p>
         </div>
       </div>
     </section>
@@ -180,7 +182,7 @@
           <p class="mystery-return" id="mystery-return">A próxima pista é liberada conforme os dias passam. A solução aparece no domingo.</p>
         </div>
       </article>
-      <div class="daily-foot"><span>OBSERVE AS PISTAS · MONTE SUA HIPÓTESE</span><span>UMA INVESTIGAÇÃO NOVA A CADA SEMANA</span></div>
+      <div class="daily-foot"><span>OBSERVE AS PISTAS · MONTE SUA HIPÓTESE</span><a href="misterios.html">CONSULTAR ARQUIVO DE INVESTIGAÇÕES ↗</a></div>
     </section>
 
     <section class="originals-section">
@@ -217,7 +219,7 @@
     </section>
   </main>
 
-  <footer class="footer"><a class="brand" href="./"><span class="brand-symbol">N</span> nexora<span class="brand-period">.</span></a><span>DISCOVER SOMETHING NEW.</span><div><a href="about.html">Sobre</a><a href="privacy.html">Privacidade</a><a href="discoveries/">Arquivo</a><a href="feed.xml">RSS</a></div><small>© <span id="year"></span> NEXORA · CONHECIMENTO EM MOVIMENTO.</small></footer>
+  <footer class="footer"><a class="brand" href="./"><span class="brand-symbol">N</span> nexora<span class="brand-period">.</span></a><span>DISCOVER SOMETHING NEW.</span><div><a href="about.html">Sobre</a><a href="privacy.html">Privacidade</a><a href="discoveries/">Descobertas</a><a href="misterios.html">Investigações</a><a href="articles/">Guias EN</a><a href="feed.xml">RSS</a></div><small>© <span id="year"></span> NEXORA · CONHECIMENTO EM MOVIMENTO.</small></footer>
   <script src="discoveries.js"></script>
   <script src="app.js"></script>
 </body>

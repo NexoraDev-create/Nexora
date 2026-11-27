@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Nexora — Descubra algo novo",
+  "short_name": "Nexora",
+  "description": "Descobertas diárias, experiências interativas e investigações.",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "icons": [
+    {
+      "src": "app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
