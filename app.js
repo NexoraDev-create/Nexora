@@ -95,9 +95,12 @@ const weeklyMysteries = [
 ];
 function weekIndex(){
   const now=new Date();
-  const first=new Date(now.getFullYear(),0,1);
-  const week=Math.floor((now-first)/604800000);
-  return week%weeklyMysteries.length;
+  const monday=new Date(now.getFullYear(),now.getMonth(),now.getDate()-((now.getDay()+6)%7));
+  const year=monday.getFullYear();
+  const firstDay=new Date(year,0,1);
+  const firstMonday=new Date(year,0,1-((firstDay.getDay()+6)%7));
+  const week=Math.floor((monday-firstMonday)/604800000);
+  return ((week%weeklyMysteries.length)+weeklyMysteries.length)%weeklyMysteries.length;
 }
 function setupWeeklyMystery(){
   const root=document.getElementById("mystery-clues");
