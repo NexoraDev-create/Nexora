@@ -33,10 +33,10 @@ const setText = (id,value)=>{const el=document.getElementById(id);if(el)el.textC
 const journeyKey="nexora-journey-v1";
 const localDateKey=(date=new Date())=>[date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-");
 const todayKey=localDateKey();
-let journey={today:todayKey,actions:{},lastCompleted:"",streak:0};
+let journey={today:todayKey,actions:{},lastCompleted:"",streak:0,xp:0,missions:0};
 try{
   const saved=JSON.parse(localStorage.getItem(journeyKey)||"null");
-  if(saved && typeof saved==="object")journey={...journey,...saved,actions:saved.today===todayKey && saved.actions && typeof saved.actions==="object" ? saved.actions : {}};
+  if(saved && typeof saved==="object")journey={...journey,...saved,actions:saved.today===todayKey && saved.actions && typeof saved.actions==="object" ? saved.actions : {},xp:Number.isFinite(saved.xp)?Math.max(0,saved.xp):0,missions:Number.isFinite(saved.missions)?Math.max(0,saved.missions):0};
 }catch(error){/* armazenamento indisponível: a jornada funciona durante esta visita */}
 if(journey.today!==todayKey){journey.today=todayKey;journey.actions={};}
 function saveJourney(){try{localStorage.setItem(journeyKey,JSON.stringify(journey));}catch(error){/* armazenamento local pode estar bloqueado */}}
@@ -57,15 +57,30 @@ function updateJourney(){
   });
   const message=document.getElementById("return-message");
   if(message)message.textContent=done>=2?"Missão diária concluída. Sua sequência está atualizada.":`${done} de 2 atividades concluídas. Complete mais ${2-done} para fechar a missão de hoje.`;
+  const levels=[{name:"Curioso",min:0},{name:"Explorador",min:100},{name:"Pesquisador",min:250},{name:"Especialista",min:500},{name:"Mestre Nexora",min:1000}];
+  const level=levels.reduce((current,item)=>journey.xp>=item.min?item:current,levels[0]);
+  const next=levels.find(item=>item.min>journey.xp);
+  const levelEl=document.getElementById("explorer-level");if(levelEl)levelEl.textContent=`Nível ${levels.indexOf(level)+1} · ${level.name}`;
+  const xpEl=document.getElementById("explorer-xp");if(xpEl)xpEl.textContent=String(journey.xp);
+  const progressEl=document.getElementById("explorer-progress");const progressFill=document.getElementById("explorer-progress-fill");
+  const percent=next?Math.round((journey.xp-level.min)/(next.min-level.min)*100):100;
+  if(progressEl)progressEl.setAttribute("aria-valuenow",String(percent));if(progressFill)progressFill.style.width=percent+"%";
+  const nextEl=document.getElementById("explorer-next");if(nextEl)nextEl.textContent=next?`${next.min-journey.xp} XP para o próximo nível`:"Nível máximo alcançado";
+  const unlocked={first:journey.missions>=1,streak3:journey.streak>=3,xp100:journey.xp>=100,streak7:journey.streak>=7};
+  document.querySelectorAll("[data-badge]").forEach(badge=>{const active=!!unlocked[badge.dataset.badge];badge.classList.toggle("unlocked",active);badge.classList.toggle("locked",!active);badge.setAttribute("aria-label",badge.textContent+(active?" · desbloqueada":" · bloqueada"));});
 }
 function completeJourneyTask(task){
   if(journey.actions[task])return;
   journey.actions[task]=true;
+  const points={discovery:10,challenge:15,lab:10};
+  journey.xp=(journey.xp||0)+points[task];
   const done=["discovery","challenge","lab"].filter(key=>journey.actions[key]).length;
   if(done>=2 && journey.lastCompleted!==todayKey){
     const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
     journey.streak=journey.lastCompleted===localDateKey(yesterday)?(journey.streak||0)+1:1;
     journey.lastCompleted=todayKey;
+    journey.xp+=25;
+    journey.missions=(journey.missions||0)+1;
   }
   journey.today=todayKey;
   saveJourney();
