@@ -81,12 +81,12 @@ collection = f'''<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b0d10">
-  <meta name="description" content="Explore o arquivo de descobertas da Nexora: ciência, história, natureza, astronomia e muito mais.">
+  <meta name="description" content="Arquivo de curiosidades e descobertas da Nexora sobre ciência, história, natureza e astronomia. Leia explicações, conheça fatos e consulte fontes.">
   <link rel="canonical" href="{collection_url}"><link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <meta property="og:type" content="website"><meta property="og:site_name" content="Nexora"><meta property="og:url" content="{collection_url}">
-  <meta property="og:title" content="Arquivo de descobertas | Nexora"><meta property="og:description" content="Uma coleção de descobertas para explorar, entender e compartilhar.">
+  <meta property="og:title" content="Arquivo de descobertas | Nexora"><meta property="og:description" content="Curiosidades sobre ciência, história, natureza e astronomia, com contexto e fontes para continuar explorando.">
   <meta property="og:image" content="{BASE}discovery-share.svg"><meta name="twitter:card" content="summary_large_image">
-  <title>Arquivo de descobertas | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../app-icon-192.png">
+  <title>Curiosidades e descobertas sobre ciência e história | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../app-icon-192.png">
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"CollectionPage","name":"Arquivo de descobertas da Nexora","url":collection_url,"inLanguage":"pt-BR"},ensure_ascii=False)}</script>
 </head>
 <body><a class="skip-link" href="#main-content">Pular para o conteúdo</a>
