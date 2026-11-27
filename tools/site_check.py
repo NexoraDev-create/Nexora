@@ -167,7 +167,7 @@ except (ET.ParseError, OSError) as exc:
 
 try:
     manifest = json.loads((ROOT / "manifest.webmanifest").read_text(encoding="utf-8"))
-    if manifest.get("start_url") != "./" or manifest.get("display") != "standalone" or not manifest.get("icons"):
+    if manifest.get("start_url") != "./" or manifest.get("display") != "standalone" or not any(icon.get("sizes") == "192x192" for icon in manifest.get("icons", [])) or not any(icon.get("sizes") == "512x512" for icon in manifest.get("icons", [])):
         errors.append("manifest.webmanifest: missing install metadata")
     for icon in manifest.get("icons", []):
         if not (ROOT / icon.get("src", "missing")).exists():

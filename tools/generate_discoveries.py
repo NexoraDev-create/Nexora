@@ -30,7 +30,7 @@ for item in items:
   <meta name="description" content="{e(description, quote=True)}">
   <link rel="canonical" href="{url}">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../app-icon-192.png">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Nexora">
   <meta property="og:url" content="{url}">
@@ -86,7 +86,7 @@ collection = f'''<!doctype html>
   <meta property="og:type" content="website"><meta property="og:site_name" content="Nexora"><meta property="og:url" content="{collection_url}">
   <meta property="og:title" content="Arquivo de descobertas | Nexora"><meta property="og:description" content="Uma coleção de descobertas para explorar, entender e compartilhar.">
   <meta property="og:image" content="{BASE}discovery-share.svg"><meta name="twitter:card" content="summary_large_image">
-  <title>Arquivo de descobertas | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="manifest" href="../manifest.webmanifest">
+  <title>Arquivo de descobertas | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../app-icon-192.png">
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"CollectionPage","name":"Arquivo de descobertas da Nexora","url":collection_url,"inLanguage":"pt-BR"},ensure_ascii=False)}</script>
 </head>
 <body><a class="skip-link" href="#main-content">Pular para o conteúdo</a>

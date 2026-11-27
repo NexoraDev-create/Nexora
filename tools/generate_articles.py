@@ -50,7 +50,7 @@ page=f'''<!doctype html>
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b0d10">
   <meta name="description" content="Explore os guias práticos da Nexora sobre trabalho independente, ferramentas digitais, produtividade e criação de produtos. Conteúdo em inglês.">
-  <link rel="canonical" href="{url}"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest">
+  <link rel="canonical" href="{url}"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../app-icon-192.png">
   <meta property="og:type" content="website"><meta property="og:site_name" content="Nexora"><meta property="og:url" content="{url}"><meta property="og:title" content="Guias práticos em inglês | Nexora"><meta property="og:description" content="Uma biblioteca de guias práticos sobre trabalho independente e ferramentas digitais.">
   <title>Guias práticos em inglês | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="stylesheet" href="../article.css">
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"CollectionPage","name":"Guias práticos da Nexora","url":url,"inLanguage":"pt-BR"},ensure_ascii=False)}</script>
