@@ -1,6 +1,6 @@
 # Nexora
 
-An independent English-language publication about practical technology, useful digital tools, productivity, and independent work.
+Nexora is an independent knowledge platform in development. Its goal is to turn curiosity into exploration through daily discoveries, interactive experiments, challenges, and original research.
 
 ## Local preview
 
@@ -12,41 +12,40 @@ python -m http.server 4173 --bind 127.0.0.1
 
 Open `http://127.0.0.1:4173` on the same computer.
 
-## Production build and checks
+## Checks and production build
 
 ```bash
 python tools/site_check.py
 bash tools/build_site.sh
 ```
 
-The build creates a clean production bundle in `dist/`. The audit checks page metadata, structured data, accessibility landmarks, duplicate IDs, local links and assets, and RSS feed consistency.
+The build creates a clean production bundle in `dist/`. The audit checks metadata, structured data, accessibility landmarks, duplicate IDs, local links/assets, and RSS feed consistency.
 
 ## Published site
 
 - Live site: https://nexoradev-create.github.io/Nexora/
 - Sitemap: https://nexoradev-create.github.io/Nexora/sitemap.xml
 - RSS feed: https://nexoradev-create.github.io/Nexora/feed.xml
-- Google Search Console verification file is published at the site root.
 
-## Current contents
+## Current prototype
 
-- Responsive editorial homepage with a premium dark visual identity.
-- 19 practical English-language guides across digital tools, workflows, freelancing, security, accessibility, planning, and communication.
-- About and Privacy pages.
-- RSS 2.0 feed and XML sitemap.
-- Keyboard skip links, visible focus states, labeled navigation, and reduced-motion support.
-- Automated checks for metadata, JSON-LD, duplicate IDs, accessible landmarks, broken local links/assets, and RSS consistency.
-- No analytics, advertising, newsletter collection, user accounts, or tracking scripts are enabled.
+- Portuguese-language homepage and responsive dark visual identity.
+- Daily discovery selected by date, with an external reference source.
+- Interactive inverse-square light-intensity experiment.
+- Daily multiple-choice challenge with answer explanation.
+- Preview cards for future Nexora Originals projects.
+- Existing English practical guides retained in the repository as an archive while the new editorial direction is developed.
+- No analytics, advertising, newsletter collection, user accounts, or visitor tracking are enabled.
 
-## Before monetization
+## Before public relaunch or monetization
 
-- Review and finalize the privacy policy so it accurately describes the live host and any services enabled later.
-- Establish a safe public contact method appropriate for an independent publication.
-- Fact-check changing software details and add reliable primary references where needed.
-- Test deployed pages on phones and desktop.
+- Review and fact-check all daily discovery entries and their sources.
+- Expand the Lab and build the Atlas and Originals experiences before presenting them as finished features.
+- Update the RSS feed and sitemap to reflect the new editorial direction.
+- Test the deployed site on phones and desktop.
 - Keep analytics, advertising, forms, and newsletter collection disabled until their privacy disclosures and consent requirements are handled.
 - Monetization and payment services have separate eligibility requirements; any service requiring an adult account holder must be managed by a parent or guardian.
 
 ## Editorial standard
 
-Prioritize practical, specific guidance over generic search-engine filler. Clearly distinguish editorial content from advertising or affiliate links. Update articles when product details or policies change.
+Prioritize original, useful, source-backed content. Clearly distinguish verified facts, interpretations, and hypothetical scenarios. Never publish generic filler just to increase article count.
