@@ -64,7 +64,7 @@ class AuditParser(HTMLParser):
             self.description = bool(attrs.get("content", "").strip())
 
 errors = []
-pages = sorted(p for p in ROOT.glob("*.html") if not p.name.startswith("google")) + sorted((ROOT / "articles").glob("*.html"))
+pages = sorted(p for p in ROOT.glob("*.html") if not p.name.startswith("google")) + sorted((ROOT / "articles").glob("*.html")) + sorted((ROOT / "discoveries").glob("*.html"))
 parsed = {}
 for page in pages:
     parser = AuditParser()
@@ -85,7 +85,7 @@ for page in pages:
             errors.append(f"{rel}: invalid JSON-LD: {exc}")
     if page.name != "404.html" and not schemas:
         errors.append(f"{rel}: missing structured data (JSON-LD)")
-    if page.parent.name == "articles" and schemas and schemas[0].get("@type") != "Article":
+    if (page.parent.name == "articles" or (page.parent.name == "discoveries" and page.name != "index.html")) and schemas and schemas[0].get("@type") != "Article":
         errors.append(f"{rel}: article page must use Article structured data")
     if not parser.lang:
         errors.append(f"{rel}: missing html lang attribute")
