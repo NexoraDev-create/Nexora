@@ -36,11 +36,11 @@ for item in items:
   <meta property="og:url" content="{url}">
   <meta property="og:title" content="{e(title, quote=True)} | Nexora">
   <meta property="og:description" content="{e(description, quote=True)}">
-  <meta property="og:image" content="{BASE}discovery-share.svg">
+  <meta property="og:image" content="{BASE}discovery-share.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{e(title, quote=True)} | Nexora">
   <meta name="twitter:description" content="{e(description, quote=True)}">
-  <meta name="twitter:image" content="{BASE}discovery-share.svg">
+  <meta name="twitter:image" content="{BASE}discovery-share.png">
   <title>{e(title)} | Nexora</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,7 +85,7 @@ collection = f'''<!doctype html>
   <link rel="canonical" href="{collection_url}"><link rel="icon" type="image/svg+xml" href="../favicon.svg">
   <meta property="og:type" content="website"><meta property="og:site_name" content="Nexora"><meta property="og:url" content="{collection_url}">
   <meta property="og:title" content="Arquivo de descobertas | Nexora"><meta property="og:description" content="Curiosidades sobre ciência, história, natureza e astronomia, com contexto e fontes para continuar explorando.">
-  <meta property="og:image" content="{BASE}discovery-share.svg"><meta name="twitter:card" content="summary_large_image">
+  <meta property="og:image" content="{BASE}discovery-share.png"><meta name="twitter:card" content="summary_large_image">
   <title>Curiosidades e descobertas sobre ciência e história | Nexora</title><link rel="stylesheet" href="../styles.css"><link rel="manifest" href="../manifest.webmanifest"><link rel="apple-touch-icon" href="../app-icon-192.png">
   <script type="application/ld+json">{json.dumps({"@context":"https://schema.org","@type":"CollectionPage","name":"Arquivo de descobertas da Nexora","url":collection_url,"inLanguage":"pt-BR"},ensure_ascii=False)}</script>
 </head>
