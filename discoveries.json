@@ -61,5 +61,32 @@
     "source": "https://www.nih.gov/",
     "label": "NATIONAL INSTITUTES OF HEALTH",
     "slug": "human-microbiome"
+  },
+  {
+    "category": "ASTRONOMIA",
+    "title": "A Lua também tem terremotos.",
+    "summary": "Sismômetros instalados pelas missões Apollo registraram abalos sísmicos na Lua. Alguns são provocados pela atração gravitacional da Terra; outros estão ligados ao resfriamento e à contração lunar.",
+    "detail": "Esses eventos são chamados de moonquakes, ou sismos lunares. Há diferentes tipos: alguns acontecem no interior da Lua por influência das marés gravitacionais, enquanto outros estão associados à contração gradual do satélite à medida que ele esfria. Também existem tremores causados por impactos de meteoroides e por variações de temperatura na superfície.",
+    "source": "https://science.nasa.gov/moon/moonquakes/",
+    "label": "NASA · MOONQUAKES",
+    "slug": "moonquakes-lua-terremotos"
+  },
+  {
+    "category": "OCEANOS",
+    "title": "Existem animais que produzem a própria luz no fundo do mar.",
+    "summary": "A bioluminescência é a produção de luz por uma reação química em um organismo. Ela aparece em diferentes formas de vida marinha, de bactérias a peixes e lulas.",
+    "detail": "No oceano, a luz produzida por organismos pode ajudar a atrair presas, confundir predadores ou permitir comunicação. A reação química acontece no próprio organismo ou pode envolver substâncias liberadas por ele. A luz costuma ser azul ou azul-esverdeada, mas outras cores também existem.",
+    "source": "https://oceanservice.noaa.gov/facts/biolum.html",
+    "label": "NOAA · BIOLUMINESCÊNCIA",
+    "slug": "bioluminescencia-luz-viva-oceano"
+  },
+  {
+    "category": "OCEANOS",
+    "title": "A luz do Sol quase não chega abaixo de 200 metros no oceano.",
+    "summary": "Em condições favoráveis, alguma luz pode ser detectada a até 1.000 metros de profundidade, mas raramente há luz significativa abaixo dos primeiros 200 metros.",
+    "detail": "A região iluminada do oceano é chamada de zona eufótica. Abaixo dela, a intensidade da luz diminui rapidamente; na chamada zona afótica, abaixo de 1.000 metros, a luz solar não penetra. Por isso, muitos organismos das grandes profundidades dependem de outras estratégias para encontrar alimento e sobreviver.",
+    "source": "https://oceanservice.noaa.gov/facts/light_travel.html",
+    "label": "NOAA · LUZ NO OCEANO",
+    "slug": "luz-solar-profundidade-oceano"
   }
 ]
