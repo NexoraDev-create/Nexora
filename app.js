@@ -28,6 +28,62 @@ const requestedIndex=requestedDiscovery!==null && /^\d+$/.test(requestedDiscover
 const discoveryIndex=Number.isInteger(requestedIndex) && requestedIndex>=0 && requestedIndex<discoveries.length ? requestedIndex : dailyDiscoveryIndex;
 const discovery=discoveries[discoveryIndex];
 const setText = (id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+
+// Jornada diária: duas de três atividades concluem a missão e mantêm a sequência.
+const journeyKey="nexora-journey-v1";
+const localDateKey=(date=new Date())=>[date.getFullYear(),String(date.getMonth()+1).padStart(2,"0"),String(date.getDate()).padStart(2,"0")].join("-");
+const todayKey=localDateKey();
+let journey={today:todayKey,actions:{},lastCompleted:"",streak:0};
+try{
+  const saved=JSON.parse(localStorage.getItem(journeyKey)||"null");
+  if(saved && typeof saved==="object")journey={...journey,...saved,actions:saved.today===todayKey && saved.actions && typeof saved.actions==="object" ? saved.actions : {}};
+}catch(error){/* armazenamento indisponível: a jornada funciona durante esta visita */}
+if(journey.today!==todayKey){journey.today=todayKey;journey.actions={};}
+function saveJourney(){try{localStorage.setItem(journeyKey,JSON.stringify(journey));}catch(error){/* armazenamento local pode estar bloqueado */}}
+function updateJourney(){
+  const tasks=["discovery","challenge","lab"];
+  const done=tasks.filter(task=>journey.actions[task]).length;
+  const count=document.getElementById("return-streak-count");
+  const progress=document.getElementById("return-progress");
+  const fill=document.getElementById("return-progress-fill");
+  if(count)count.textContent=String(journey.streak||0);
+  if(progress)progress.setAttribute("aria-valuenow",String(Math.min(done,2)));
+  if(fill)fill.style.width=(Math.min(done,2)/2*100)+"%";
+  tasks.forEach(task=>{
+    const row=document.getElementById("task-"+task);
+    const status=document.getElementById("task-"+task+"-status");
+    if(row)row.classList.toggle("is-done",!!journey.actions[task]);
+    if(status)status.textContent=journey.actions[task]?"CONCLUÍDO":"PENDENTE";
+  });
+  const message=document.getElementById("return-message");
+  if(message)message.textContent=done>=2?"Missão diária concluída. Sua sequência está atualizada.":`${done} de 2 atividades concluídas. Complete mais ${2-done} para fechar a missão de hoje.`;
+}
+function completeJourneyTask(task){
+  if(journey.actions[task])return;
+  journey.actions[task]=true;
+  const done=["discovery","challenge","lab"].filter(key=>journey.actions[key]).length;
+  if(done>=2 && journey.lastCompleted!==todayKey){
+    const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+    journey.streak=journey.lastCompleted===localDateKey(yesterday)?(journey.streak||0)+1:1;
+    journey.lastCompleted=todayKey;
+  }
+  journey.today=todayKey;
+  saveJourney();
+  updateJourney();
+}
+if(journey.lastCompleted){
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  if(journey.lastCompleted!==todayKey && journey.lastCompleted!==localDateKey(yesterday))journey.streak=0;
+}
+updateJourney();
+const markDiscovery=document.getElementById("mark-discovery");
+if(markDiscovery){
+  if(journey.actions.discovery){markDiscovery.disabled=true;markDiscovery.textContent="Descoberta concluída ✓";}
+  markDiscovery.addEventListener("click",()=>{
+    completeJourneyTask("discovery");markDiscovery.disabled=true;markDiscovery.textContent="Descoberta concluída ✓";
+  });
+}
+
 setText("discovery-number",String(discoveryIndex+1).padStart(3,"0"));
 setText("discovery-category",discovery.category);
 setText("discovery-title",discovery.title);
@@ -74,7 +130,7 @@ function updateLab(){
   if(line)line.style.width=(12+(distance-1)*6.3)+"%";
   if(rays)rays.style.opacity=String(Math.max(.18,1/distance));
 }
-if(range){range.addEventListener("input",updateLab);updateLab();}
+if(range){range.addEventListener("input",()=>{updateLab();completeJourneyTask("lab");});updateLab();}
 
 const challenge=challenges[dayIndex(challenges.length)];
 setText("challenge-number",String(dayIndex(challenges.length)+1).padStart(2,"0"));
@@ -92,6 +148,7 @@ if(answersEl){
     button.addEventListener("click",()=>{
       if(answersEl.dataset.answered==="true")return;
       answersEl.dataset.answered="true";
+      completeJourneyTask("challenge");
       const correct=index===challenge.correct;
       [...answersEl.children].forEach((item,i)=>{
         item.disabled=true;

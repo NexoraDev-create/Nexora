@@ -82,9 +82,27 @@
             <button class="inline-link share-link" id="share-discovery" type="button">Compartilhar descoberta <span>↗</span></button>
           </div>
           <p class="share-feedback" id="share-feedback" aria-live="polite"></p>
+          <button class="inline-link read-discovery" id="mark-discovery" type="button">Marcar descoberta como lida <span>✓</span></button>
         </div>
       </article>
       <div class="daily-foot"><span>UMA NOVA EDIÇÃO A CADA DIA</span><span>CONTEÚDO COM FONTES, NÃO ACHISMOS</span></div>
+    </section>
+
+    <section class="return-section section-wrap" id="jornada" aria-labelledby="return-title">
+      <div class="return-panel">
+        <div class="return-heading">
+          <div><div class="eyebrow">SUA JORNADA / TODO DIA</div><h2 id="return-title">Pequenos passos. <em>Novas descobertas.</em></h2></div>
+          <div class="return-streak"><strong id="return-streak-count">0</strong><span>DIAS DE<br>SEQUÊNCIA</span></div>
+        </div>
+        <p class="return-description">Complete duas atividades para fechar sua missão diária. Seu progresso fica salvo neste dispositivo.</p>
+        <div class="return-progress" role="progressbar" aria-label="Progresso da missão diária" aria-valuemin="0" aria-valuemax="2" aria-valuenow="0" id="return-progress"><span id="return-progress-fill"></span></div>
+        <div class="return-tasks" aria-live="polite">
+          <div class="return-task" id="task-discovery"><span class="task-check">01</span><span><strong>Ler a descoberta</strong><small>Explore o fato do dia</small></span><b id="task-discovery-status">PENDENTE</b></div>
+          <div class="return-task" id="task-challenge"><span class="task-check">02</span><span><strong>Responder ao desafio</strong><small>Teste o que você sabe</small></span><b id="task-challenge-status">PENDENTE</b></div>
+          <div class="return-task" id="task-lab"><span class="task-check">03</span><span><strong>Experimentar no Lab</strong><small>Altere a distância da luz</small></span><b id="task-lab-status">PENDENTE</b></div>
+        </div>
+        <p class="return-message" id="return-message" aria-live="polite">Escolha duas atividades para concluir a missão de hoje.</p>
+      </div>
     </section>
 
     <section class="lab-section" id="lab">
