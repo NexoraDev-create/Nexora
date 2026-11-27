@@ -30,15 +30,42 @@ function dayIndex(length){
 const today = new Date();
 const dateEl = document.getElementById("today-date");
 if(dateEl) dateEl.textContent = new Intl.DateTimeFormat("pt-BR",{day:"2-digit",month:"long",year:"numeric"}).format(today).toUpperCase();
-const discovery = discoveries[dayIndex(discoveries.length)];
+const dailyDiscoveryIndex=dayIndex(discoveries.length);
+const requestedDiscovery=new URLSearchParams(window.location.search).get("descoberta");
+const requestedIndex=requestedDiscovery!==null && /^\d+$/.test(requestedDiscovery) ? Number(requestedDiscovery) : -1;
+const discoveryIndex=Number.isInteger(requestedIndex) && requestedIndex>=0 && requestedIndex<discoveries.length ? requestedIndex : dailyDiscoveryIndex;
+const discovery=discoveries[discoveryIndex];
 const setText = (id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
-setText("discovery-number",String(dayIndex(discoveries.length)+1).padStart(3,"0"));
+setText("discovery-number",String(discoveryIndex+1).padStart(3,"0"));
 setText("discovery-category",discovery.category);
 setText("discovery-title",discovery.title);
 setText("discovery-summary",discovery.summary);
 setText("discovery-detail",discovery.detail);
 const sourceLink=document.getElementById("discovery-source");
 if(sourceLink){sourceLink.href=discovery.source;sourceLink.textContent="Fonte: "+discovery.label+" ↗";}
+const shareButton=document.getElementById("share-discovery");
+const shareFeedback=document.getElementById("share-feedback");
+if(shareButton){
+  shareButton.addEventListener("click",async()=>{
+    const shareUrl=new URL(window.location.href);
+    shareUrl.search="";
+    shareUrl.searchParams.set("descoberta",String(discoveryIndex));
+    shareUrl.hash="descoberta";
+    const shareData={title:"Nexora · "+discovery.title,text:discovery.summary+" — Leia na Nexora:",url:shareUrl.href};
+    try{
+      if(navigator.share){
+        await navigator.share(shareData);
+        if(shareFeedback)shareFeedback.textContent="Compartilhamento aberto.";
+      }else{
+        await navigator.clipboard.writeText(shareUrl.href);
+        if(shareFeedback)shareFeedback.textContent="Link da descoberta copiado.";
+      }
+    }catch(error){
+      if(error && error.name==="AbortError")return;
+      if(shareFeedback)shareFeedback.textContent="Não foi possível compartilhar agora. Tente novamente.";
+    }
+  });
+}
 
 const range=document.getElementById("distance-range");
 const target=document.getElementById("light-target");
